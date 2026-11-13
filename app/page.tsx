@@ -1,118 +1,146 @@
+
 "use client";
 
 import { useState } from "react";
 import {
-  Search, MapPin, Car, Bike, Smartphone, Sofa,
-  Tv, House, Shirt, Grid, PlusCircle, Heart, User,
-  Menu, ChevronDown
+  Search, ShoppingCart, User, Heart,
+  Menu, ChevronRight, ShoppingBag
 } from "lucide-react";
 
 const categories = [
-  { name: "Cars", icon: Car },
-  { name: "Bikes", icon: Bike },
-  { name: "Mobiles", icon: Smartphone },
-  { name: "Furniture", icon: Sofa },
-  { name: "Electronics", icon: Tv },
-  { name: "Property", icon: House },
-  { name: "Fashion", icon: Shirt },
-  { name: "More", icon: Grid }
+  "Grocery & Food",
+  "Fashion",
+  "Mobiles & Electronics",
+  "Home & Kitchen",
+  "Beauty & Personal Care",
+  "Footwear",
+  "Toys & Gifts",
+];
+
+const products = [
+  { id: 1, name: "Fresh Grocery Combo", price: 499, category: "Grocery & Food", emoji: "🥦" },
+  { id: 2, name: "Men's Casual Shirt", price: 699, category: "Fashion", emoji: "👕" },
+  { id: 3, name: "Smartphone", price: 12999, category: "Mobiles & Electronics", emoji: "📱" },
+  { id: 4, name: "Kitchen Storage Set", price: 399, category: "Home & Kitchen", emoji: "🍽️" },
+  { id: 5, name: "Beauty Care Kit", price: 599, category: "Beauty & Personal Care", emoji: "🧴" },
+  { id: 6, name: "Casual Sneakers", price: 899, category: "Footwear", emoji: "👟" },
+  { id: 7, name: "Kids Toy Set", price: 299, category: "Toys & Gifts", emoji: "🧸" },
 ];
 
 export default function Home() {
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState("All");
+  const [cart, setCart] = useState<number[]>([]);
+
+  const filtered = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase()) &&
+    (selected === "All" || p.category === selected)
+  );
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900 pb-24">
-      <header className="bg-emerald-700 text-white p-5 rounded-b-3xl">
+    <main className="min-h-screen bg-gray-50 text-gray-900 pb-10">
+      <header className="bg-emerald-800 text-white p-5 rounded-b-3xl">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-black">KERALA MART</h1>
-            <p className="text-sm text-emerald-100">
-              Buy Local. Sell Easy.
+            <p className="text-emerald-100 text-sm">
+              Your Kerala Shopping Destination
             </p>
           </div>
-          <Menu size={28} />
+          <div className="flex gap-4">
+            <ShoppingCart />
+            <Menu />
+          </div>
         </div>
 
-        <div className="mt-6 bg-white rounded-xl flex items-center p-3 gap-2 text-gray-500">
+        <div className="mt-6 bg-white rounded-xl flex items-center gap-2 p-3 text-gray-500">
           <Search size={20} />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search cars, bikes, mobiles..."
+            placeholder="Search products..."
             className="w-full outline-none text-gray-900"
           />
         </div>
-
-        <div className="flex items-center gap-2 mt-4 text-sm">
-          <MapPin size={18} />
-          Kerala · All Districts
-          <ChevronDown size={16} />
-        </div>
+        <p className="text-sm mt-4 text-emerald-100">
+          📍 Delivering Across Kerala
+        </p>
       </header>
 
       <section className="p-4">
-        <h2 className="font-bold text-lg mb-4">Browse Categories</h2>
-        <div className="grid grid-cols-4 gap-3">
-          {categories.map((cat) => {
-            const Icon = cat.icon;
-            return (
-              <button
-                key={cat.name}
-                className="bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center gap-2"
-              >
-                <Icon size={27} className="text-emerald-700" />
-                <span className="text-xs font-semibold">{cat.name}</span>
-              </button>
-            );
-          })}
+        <div className="bg-emerald-100 rounded-2xl p-5">
+          <p className="text-emerald-800 font-semibold">
+            Welcome to Kerala Mart
+          </p>
+          <h2 className="text-2xl font-black mt-2">
+            Shop Everything You Love!
+          </h2>
+          <p className="text-sm mt-2 text-gray-700">
+            Great products. Great prices.
+          </p>
+          <ShoppingBag className="text-emerald-800 mt-3" size={35} />
         </div>
       </section>
 
-      <section className="px-4 mt-3">
-        <div className="flex justify-between mb-4">
-          <h2 className="font-bold text-lg">Latest Listings</h2>
-          <span className="text-emerald-700 text-sm">View all</span>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { name: "Used Car", price: "₹3,50,000", place: "Kottayam", image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600" },
-            { name: "Smartphone", price: "₹12,000", place: "Alappuzha", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600" },
-            { name: "Sofa Set", price: "₹8,500", place: "Ernakulam", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600" },
-            { name: "Motorcycle", price: "₹45,000", place: "Kollam", image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600" }
-          ]
-          .filter(item => item.name.toLowerCase().includes(search.toLowerCase())) 
-          .map((item) => (
-            <article key={item.name} className="bg-white rounded-2xl overflow-hidden shadow-sm">
-              <img src={item.image} alt={item.name} className="w-full h-32 object-cover" />
-              <div className="p-3">
-                <h3 className="font-semibold">{item.name}</h3>
-                <p className="text-emerald-700 font-bold mt-1">{item.price}</p>
-                <p className="text-gray-500 text-xs mt-1">{item.place}</p>
-              </div>
-            </article>
+      <section className="px-4">
+        <h2 className="font-bold text-lg mb-3">Shop by Category</h2>
+        <div className="flex gap-2 overflow-x-auto pb-3">
+          {["All", ...categories].map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelected(category)}
+              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm ${
+                selected === category
+                  ? "bg-emerald-700 text-white"
+                  : "bg-white text-gray-700 border"
+              }`}
+            >
+              {category}
+            </button>
           ))}
         </div>
       </section>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around p-3">
-        <button className="flex flex-col items-center text-emerald-700">
-          <House size={22}/><span className="text-xs">Home</span>
-        </button>
-        <button className="flex flex-col items-center">
-          <Search size={22}/><span className="text-xs">Search</span>
-        </button>
-        <button className="flex flex-col items-center">
-          <PlusCircle size={22}/><span className="text-xs">Sell</span>
-        </button>
-        <button className="flex flex-col items-center">
-          <Heart size={22}/><span className="text-xs">Saved</span>
-        </button>
-        <button className="flex flex-col items-center">
-          <User size={22}/><span className="text-xs">Profile</span>
-        </button>
-      </nav>
+      <section className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="font-bold text-lg">Featured Products</h2>
+          <span className="text-emerald-700 text-sm">Explore <ChevronRight className="inline" size={16}/></span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {filtered.map((product) => (
+            <article key={product.id} className="bg-white rounded-2xl p-3 shadow-sm">
+              <div className="h-28 bg-emerald-50 rounded-xl flex items-center justify-center text-5xl">
+                {product.emoji}
+              </div>
+              <p className="font-semibold mt-3 text-sm">{product.name}</p>
+              <p className="text-xs text-gray-500 mt-1">{product.category}</p>
+              <p className="font-black text-emerald-800 mt-2">
+                ₹{product.price.toLocaleString("en-IN")}
+              </p>
+              <button
+                onClick={() => setCart((old) => [...old, product.id])}
+                className="w-full mt-3 bg-emerald-700 text-white rounded-lg py-2 text-sm"
+              >
+                Add to Cart
+              </button>
+            </article>
+          ))}
+        </div>
+        {filtered.length === 0 && (
+          <p className="text-center text-gray-500 py-8">
+            No products found.
+          </p>
+        )}
+      </section>
+
+      <footer className="bg-emerald-900 text-white p-6 text-center mt-6">
+        <h2 className="font-black text-xl">KERALA MART</h2>
+        <p className="text-sm text-emerald-100 mt-2">
+          Buy Local. Shop Smart.
+        </p>
+        <p className="text-xs mt-4">© 2026 Kerala Mart</p>
+      </footer>
     </main>
   );
 }
