@@ -3,8 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Kerala Mart",
-  description:
-    "Kerala's own free online buy and sell marketplace.",
+  description: "Kerala's own free online buy and sell marketplace.",
 };
 
 export default function RootLayout({
